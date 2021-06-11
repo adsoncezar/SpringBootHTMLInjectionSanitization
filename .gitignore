@@ -1,0 +1,3 @@
+# Project exclude paths
+/AnnotationSanitize/target/
+/FilterSanitize/target/
