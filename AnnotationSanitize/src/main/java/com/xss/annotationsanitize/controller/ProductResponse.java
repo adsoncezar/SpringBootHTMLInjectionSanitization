@@ -1,5 +1,6 @@
 package com.xss.annotationsanitize.controller;
 
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductResponse {
 
-    private String warehouseName;
-    private String category;
-    private ProductRequest product;
+  private String warehouse;
+  private String category;
+  private String name;
+  private String description;
+  private String brand;
+  private BigDecimal price;
 }

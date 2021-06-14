@@ -18,6 +18,6 @@ public class ProductRequest {
     String name;
     @NoHtml
     String description;
-    BigDecimal value;
+    BigDecimal price;
 
 }
