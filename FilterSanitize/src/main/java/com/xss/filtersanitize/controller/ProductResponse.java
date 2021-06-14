@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequest {
+public class ProductResponse {
 
-    String name;
-    String description;
-    BigDecimal price;
-
+  private String warehouse;
+  private String category;
+  private String name;
+  private String description;
+  private String brand;
+  private BigDecimal price;
 }

@@ -1,4 +1,4 @@
-package com.xss.filtersanitize.filter;
+package com.xss.filtersanitize.sanitization;
 
 
 import java.io.IOException;

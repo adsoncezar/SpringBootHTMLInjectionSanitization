@@ -1,8 +1,5 @@
-package com.xss.filtersanitize.filter;
+package com.xss.filtersanitize.sanitization;
 
-import static com.xss.filtersanitize.Utils.SanitizerUtils.clearXss;
-
-import com.xss.filtersanitize.Utils.SanitizerUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,8 +15,14 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
+
+  private static final PolicyFactory POLICY_FACTORY = new HtmlPolicyBuilder().toFactory();
 
   public XSSRequestWrapper(HttpServletRequest request) {
     super(request);
@@ -28,8 +31,9 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
   @Override
   public String[] getParameterValues(String parameter) {
     var values = super.getParameterValues(parameter);
-    if (values == null)
+    if (values == null) {
       return null;
+    }
 
     var count = values.length;
     var encodedValues = new String[count];
@@ -58,7 +62,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     while (headers.hasMoreElements()) {
       var header = headers.nextElement();
       var tokens = header.split(",");
-      Arrays.stream(tokens).map(SanitizerUtils::clearXss).forEach(result::add);
+      Arrays.stream(tokens).map(XSSRequestWrapper::clearXss).forEach(result::add);
     }
 
     return Collections.enumeration(result);
@@ -113,5 +117,11 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     return clearXss(body.toString());
+  }
+
+
+  public static String clearXss(String value) {
+    var s = POLICY_FACTORY.sanitize(value);
+    return Jsoup.clean(s, Whitelist.none());
   }
 }
